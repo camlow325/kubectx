@@ -44,7 +44,7 @@ current_namespace() {
   local cur_ctx
 
   cur_ctx="$(current_context)" || exit_err "error getting current context"
-  ns="$($KUBECTL config view -o=jsonpath="{.contexts[?(@.name==\"${cur_ctx}\")].context.namespace}")" \
+  ns="$(JSONPATH=ok $KUBECTL config view -o=jsonpath="{.contexts[?(@.name==\"${cur_ctx}\")].context.namespace}")" \
      || exit_err "error getting current namespace"
 
   if [[ -z "${ns}" ]]; then
@@ -59,7 +59,7 @@ current_context() {
 }
 
 get_namespaces() {
-  $KUBECTL get namespaces -o=jsonpath='{range .items[*].metadata.name}{@}{"\n"}{end}'
+  $KUBECTL get namespaces -o json | jq -r '.items[].metadata.name'
 }
 
 escape_context_name() {

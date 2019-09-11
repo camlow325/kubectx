@@ -47,7 +47,7 @@ exit_err() {
 }
 
 current_context() {
-  $KUBECTL config view -o=jsonpath='{.current-context}'
+  JSONPATH=ok $KUBECTL config view -o=jsonpath='{.current-context}'
 }
 
 get_contexts() {
